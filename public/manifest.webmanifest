@@ -1,0 +1,14 @@
+{
+  "name": "Sky Cab: The Loop",
+  "short_name": "Sky Cab",
+  "description": "A flying roadster fare run through downtown Chicago.",
+  "start_url": "/crazy-taxi-missions/",
+  "scope": "/crazy-taxi-missions/",
+  "display": "standalone",
+  "background_color": "#071018",
+  "theme_color": "#071018",
+  "icons": [
+    { "src": "/crazy-taxi-missions/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/crazy-taxi-missions/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

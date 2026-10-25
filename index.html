@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#071018" />
+    <meta name="description" content="Sky Cab: The Loop. A flying roadster fare run through downtown Chicago." />
+    <title>Sky Cab: The Loop</title>
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="apple-touch-icon" href="%BASE_URL%icons/icon-192.png" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+  </head>
+  <body>
+    <canvas id="view" aria-label="Downtown Chicago, from above"></canvas>
+    <div id="vignette" aria-hidden="true"></div>
+
+    <div id="boot" role="status">Charting the Loop…</div>
+
+    <div id="hud" hidden>
+      <header class="top">
+        <div class="cash-block">
+          <span class="kicker">Wallet</span>
+          <strong id="cash">$0</strong>
+          <span id="fare" hidden>Tips $0</span>
+        </div>
+        <div class="clock-block">
+          <span class="kicker">Fare clock</span>
+          <strong id="timer">—</strong>
+          <span id="objective">Stand by</span>
+        </div>
+        <div class="chaos-block">
+          <span class="kicker">Chaos <b id="chaos-num">0</b></span>
+          <div class="chaos-track" aria-hidden="true"><div id="chaos-fill"></div></div>
+          <button type="button" class="ghost slim" data-act="pause">Pause</button>
+        </div>
+      </header>
+      <p id="radio" hidden></p>
+      <div id="bubble" hidden>
+        <span id="bubble-name"></span>
+        <p id="bubble-text"></p>
+      </div>
+      <footer class="meters">
+        <span id="speed">0 MPH</span>
+        <span id="alt" hidden>ALT 0m</span>
+        <span id="combo" hidden>STYLE x2</span>
+        <span id="vip" hidden>Calm <b id="vip-pips"></b></span>
+      </footer>
+    </div>
+
+    <div id="touch" hidden>
+      <div id="stick" role="application" aria-label="Steer. Up is throttle, down is brake.">
+        <div id="nub"></div>
+      </div>
+      <div class="touch-actions">
+        <button id="btn-drift" type="button">Drift</button>
+        <button id="btn-jump" type="button" aria-label="Hold to charge a hop">
+          <span>Jump</span>
+          <i id="jump-fill"></i>
+        </button>
+      </div>
+    </div>
+
+    <section id="screen-title" class="screen" hidden>
+      <article class="card title-card">
+        <p class="brand"><span>Sky Cab</span> · The Loop</p>
+        <h1>Fares with altitude.</h1>
+        <p class="lede">You drive the Roadster. Passengers talk. The clock spends the fare if you let it.</p>
+        <blockquote class="ticker">
+          <cite id="ticker-name">Mara Voss</cite>
+          <p id="ticker-line">Dispatch is warming up.</p>
+        </blockquote>
+        <div id="mission-list" class="missions"></div>
+        <div class="actions">
+          <button type="button" class="primary" data-act="start">Start shift</button>
+          <button type="button" data-act="garage">Garage</button>
+          <button type="button" class="ghost" data-act="credits">Credits</button>
+        </div>
+        <p class="wallet-line">Wallet <strong id="title-cash">$0</strong></p>
+        <div class="toggles">
+          <button type="button" class="ghost slim" data-act="mute">Sound: on</button>
+          <button type="button" class="ghost slim" data-act="voice">Voice: off</button>
+          <button type="button" class="ghost slim" data-act="quality">Detail: high</button>
+          <button type="button" class="ghost slim" data-act="time">Sky: cycle</button>
+        </div>
+        <p class="fine">WASD or arrows to drive · hold Space to hop · Shift to drift · P pause · M mute</p>
+        <p class="fine">Map © OpenStreetMap contributors</p>
+      </article>
+    </section>
+
+    <section id="screen-brief" class="screen" hidden>
+      <article class="card brief-card">
+        <div class="who">
+          <svg class="portrait" viewBox="0 0 80 80" aria-hidden="true">
+            <rect width="80" height="80" rx="18" fill="#101820" />
+            <path d="M14 58c6-18 14-26 26-26s20 8 26 26" fill="#c5ced6" />
+            <circle cx="40" cy="34" r="14" fill="#e7cbb8" />
+            <path d="M24 30c2-12 8-18 16-18s14 6 16 18c-6 2-10 3-16 3s-10-1-16-3z" fill="#d5dde4" />
+            <path d="M18 36h8v6h-8zM54 36h8v6h-8z" fill="#1a242e" />
+            <path d="M26 39h28" stroke="#8eebff" stroke-width="2" />
+            <circle cx="62" cy="39" r="3" fill="#8eebff" />
+            <rect x="22" y="58" width="36" height="10" rx="3" fill="#243140" />
+          </svg>
+          <div>
+            <span class="kicker">Dispatcher</span>
+            <strong>Mara Voss</strong>
+          </div>
+        </div>
+        <h2 id="brief-title">Fare</h2>
+        <p id="brief-text"></p>
+        <p id="brief-meta" class="meta"></p>
+        <div class="actions">
+          <button type="button" class="primary" data-act="accept">Accept fare</button>
+          <button type="button" class="ghost" data-act="title">Back</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screen-pause" class="screen" hidden>
+      <article class="card">
+        <span class="kicker">Hold short</span>
+        <h2>Clock is frozen.</h2>
+        <p class="lede">The fare is still yours if you go back. Leaving the shift drops this leg without a payout.</p>
+        <div class="actions">
+          <button type="button" class="primary" data-act="resume">Resume</button>
+          <button type="button" data-act="garage">Garage</button>
+          <button type="button" class="ghost" data-act="title">Leave shift</button>
+        </div>
+        <div class="toggles">
+          <button type="button" class="ghost slim" data-act="mute">Sound: on</button>
+          <button type="button" class="ghost slim" data-act="voice">Voice: off</button>
+          <button type="button" class="ghost slim" data-act="quality">Detail: high</button>
+          <button type="button" class="ghost slim" data-act="time">Sky: cycle</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screen-garage" class="screen" hidden>
+      <article class="card garage-card">
+        <header class="garage-head">
+          <div>
+            <span class="kicker">Between fares</span>
+            <h2>Garage</h2>
+          </div>
+          <strong id="garage-cash">$0</strong>
+        </header>
+        <p class="lede">Skins, jets, hop, speed, and handling stay on this browser.</p>
+        <div id="garage-root" class="shop"></div>
+        <div class="actions">
+          <button type="button" class="primary" data-act="garage-back">Back</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screen-result" class="screen" hidden>
+      <article class="card">
+        <span id="result-kicker" class="kicker">Fare</span>
+        <h2 id="result-title">Shift</h2>
+        <p id="result-reason"></p>
+        <div id="result-rows" class="rows"></div>
+        <p id="result-note" class="meta"></p>
+        <p id="result-wallet" class="wallet-line"></p>
+        <div class="actions">
+          <button type="button" class="primary" id="btn-next" data-act="next">Next fare</button>
+          <button type="button" class="primary" id="btn-retry" data-act="retry">Retry</button>
+          <button type="button" data-act="garage">Garage</button>
+          <button type="button" class="ghost" data-act="title">Title</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screen-credits" class="screen" hidden>
+      <article class="card">
+        <span class="kicker">Sky Cab: The Loop</span>
+        <h2>Credits</h2>
+        <p>A Lee Springer LLC speed-build. Original art, writing, and procedural audio.</p>
+        <p>Map data © OpenStreetMap contributors, available under the Open Database License. Downtown Chicago is stylized from that extract: the river, the lake, and a handful of landmarks drawn as props.</p>
+        <p>The Roadster is an original flying cab. This game is not affiliated with any automaker.</p>
+        <p class="meta">Voice, when you turn it on, uses the browser’s own speech. Text bubbles stay either way.</p>
+        <div class="actions">
+          <button type="button" class="primary" data-act="title">Back</button>
+        </div>
+      </article>
+    </section>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

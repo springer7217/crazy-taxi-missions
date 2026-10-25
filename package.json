@@ -1,0 +1,21 @@
+{
+  "name": "crazy-taxi-missions",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Sky Cab: The Loop. A flying roadster fare run through downtown Chicago. A Lee Springer LLC speed-build.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "map": "node scripts/fetch-map.mjs"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "@fontsource/oswald": "^5.3.0",
+    "@fontsource/outfit": "^5.3.0"
+  }
+}
